@@ -1,4 +1,5 @@
-# 📄 Document Summary Assistant (Frontend)
+<img width="1493" height="725" alt="image" src="https://github.com/user-attachments/assets/87b24784-c757-43cd-85a5-61151a825610" /># 📄 Document Summary Assistant (Frontend) 
+Deployment Link -> https://document-summary-assistant-frontend.vercel.app/
 
 > A modern **frontend application** built with [Vite](https://vitejs.dev/) + [React](https://react.dev/) to assist in generating **summaries of documents** with a clean and responsive UI.
 
@@ -27,6 +28,9 @@
 
 
 ---
+
+<img width="1493" height="725" alt="image" src="https://github.com/user-attachments/assets/89863961-7326-4304-8235-1ea357a0d4e9" />
+
 
 ## ⚙️ Installation & Setup
 
