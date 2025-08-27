@@ -22,15 +22,8 @@
 ---
 
 ## 📂 Project Structure
-Document-Summary-Assistant-Frontend/
-├── public/ # Static assets
-├── src/ # Application source code
-├── .gitignore # Ignored files for git
-├── eslint.config.js # ESLint configuration
-├── index.html # Entry point
-├── package.json # Dependencies and scripts
-├── vite.config.js # Vite configuration
-└── README.md # Project documentation
+<img width="494" height="345" alt="image" src="https://github.com/user-attachments/assets/682db8f1-4318-46e1-b35b-4bfa205842e1" />
+
 
 
 ---
