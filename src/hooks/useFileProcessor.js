@@ -3,16 +3,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import { SUPPORTED_FILE_TYPES } from '../utils/constants';
 import { generateSummary, generateKeyPoints } from '../api/geminiApi';
-
-// Import the new libraries
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 import Tesseract from 'tesseract.js';
 
-// **FIX:** Point to the local worker file in the `public` directory
 pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
 
 export const useFileProcessor = () => {
-    // --- STATE MANAGEMENT ---
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
     const [extractedText, setExtractedText] = useState('');
@@ -22,8 +18,8 @@ export const useFileProcessor = () => {
     const [loading, setLoading] = useState({ extracting: false, summarizing: false, generatingKeyPoints: false });
     const [error, setError] = useState('');
     const [extractionProgress, setExtractionProgress] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal
 
-    // --- SIDE EFFECTS ---
     useEffect(() => {
         return () => {
             if (previewUrl) {
@@ -32,13 +28,11 @@ export const useFileProcessor = () => {
         };
     }, [previewUrl]);
 
-    // --- CORE LOGIC ---
     const handleTextExtraction = useCallback(async (fileToProcess) => {
         setLoading(prev => ({ ...prev, extracting: true }));
         setError('');
         setExtractionProgress(0);
         setExtractedText('');
-
         try {
             if (fileToProcess.type === 'application/pdf') {
                 const arrayBuffer = await new Promise((resolve, reject) => {
@@ -47,7 +41,6 @@ export const useFileProcessor = () => {
                     reader.onerror = (err) => reject(err);
                     reader.readAsArrayBuffer(fileToProcess);
                 });
-
                 const pdf = await pdfjsLib.getDocument(new Uint8Array(arrayBuffer)).promise;
                 let fullText = '';
                 for (let i = 1; i <= pdf.numPages; i++) {
@@ -57,7 +50,6 @@ export const useFileProcessor = () => {
                     setExtractionProgress(Math.round((i / pdf.numPages) * 100));
                 }
                 setExtractedText(fullText);
-
             } else if (fileToProcess.type.startsWith('image/')) {
                 const result = await Tesseract.recognize(
                     fileToProcess, 'eng',
@@ -90,6 +82,7 @@ export const useFileProcessor = () => {
         setExtractionProgress(0);
         if (previewUrl) URL.revokeObjectURL(previewUrl);
         setPreviewUrl(null);
+        setIsModalOpen(false); // Reset modal state
         const fileInput = document.getElementById('file-upload');
         if (fileInput) fileInput.value = '';
     }, [previewUrl]);
@@ -101,9 +94,8 @@ export const useFileProcessor = () => {
             return;
         }
         setFile(selectedFile);
-        if (selectedFile.type.startsWith('image/')) {
-            setPreviewUrl(URL.createObjectURL(selectedFile));
-        }
+        // Create a persistent object URL for any file type for the modal/preview
+        setPreviewUrl(URL.createObjectURL(selectedFile));
         handleTextExtraction(selectedFile);
     }, [handleReset, handleTextExtraction]);
 
@@ -136,9 +128,14 @@ export const useFileProcessor = () => {
             setLoading(prev => ({ ...prev, generatingKeyPoints: false }));
         }
     }, [extractedText]);
+    
+    // Functions to control the modal
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
     return {
         file, previewUrl, extractedText, summaryLength, summary, keyPoints, loading, error, extractionProgress,
+        isModalOpen, openModal, closeModal,
         processFile, handleSummarize, handleGenerateKeyPoints, handleReset, setSummaryLength, setError
     };
 };

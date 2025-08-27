@@ -9,10 +9,12 @@ import FilePreview from './components/features/Upload/FilePreview';
 import ExtractedTextView from './components/features/Extraction/ExtractedTextView';
 import SummarySection from './components/features/Summary/SummarySection';
 import ErrorDisplay from './components/common/ErrorDisplay';
+import Modal from './components/common/Modal'; // Import the new Modal component
 
 function App() {
     const {
         file, previewUrl, extractedText, summaryLength, summary, keyPoints, loading, error,
+        isModalOpen, openModal, closeModal,
         processFile, handleSummarize, handleGenerateKeyPoints, handleReset, setSummaryLength
     } = useFileProcessor();
 
@@ -42,6 +44,7 @@ function App() {
                                     file={file} 
                                     previewUrl={previewUrl} 
                                     onReset={handleReset} 
+                                    onPreview={openModal}
                                 />
                                 <ExtractedTextView 
                                     text={extractedText} 
@@ -60,6 +63,18 @@ function App() {
                             </div>
                         )}
                     </main>
+
+                    <Modal isOpen={isModalOpen} onClose={closeModal}>
+                        {previewUrl && (
+                            <div className="w-full h-full">
+                                {file?.type.startsWith('image/') ? (
+                                    <img src={previewUrl} alt="Full document preview" className="w-full h-full object-contain" />
+                                ) : (
+                                    <iframe src={previewUrl} title={file?.name} className="w-full h-full border-0 rounded-lg" />
+                                )}
+                            </div>
+                        )}
+                    </Modal>
                 </div>
             </div>
         </>
