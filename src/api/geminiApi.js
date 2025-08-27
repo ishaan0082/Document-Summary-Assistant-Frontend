@@ -1,7 +1,8 @@
 // src/api/geminiApi.js
 
 // The backend server will run on port 3001
-const BACKEND_URL = 'http://localhost:3001';
+// const BACKEND_URL = 'http://localhost:3001';
+const BACKEND_URL = 'https://document-summary-assistant-backend.onrender.com';
 
 /**
  * Calls our secure backend to generate a summary.
