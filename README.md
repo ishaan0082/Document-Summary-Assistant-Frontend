@@ -30,8 +30,6 @@ Deployment Link -> https://document-summary-assistant-frontend.vercel.app/
 
 ---
 
-<img width="1493" height="725" alt="image" src="https://github.com/user-attachments/assets/89863961-7326-4304-8235-1ea357a0d4e9" />
-
 
 ## ⚙️ Installation & Setup
 
